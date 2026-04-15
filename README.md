@@ -58,4 +58,4 @@ pip install rich
 Salve o arquivo como, por exemplo:
 
 ```bash
-python matrix_terminal.py
+python main.py
