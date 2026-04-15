@@ -2,6 +2,7 @@
 Chatbot Temático - Matrix Terminal
 Checkpoint 1 - Computational Thinking with Python
 """
+
 from datetime import datetime
 import time
 from rich.console import Console
