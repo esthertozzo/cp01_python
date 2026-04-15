@@ -6,8 +6,12 @@ Checkpoint 1 - Computational Thinking with Python
 from datetime import datetime
 import time
 from rich.console import Console
+from rich.panel import Panel
+from rich.align import Align
+from rich.rule import Rule
+import random
 
-console = Console()
+console = Console(force_terminal=True, color_system="truecolor")
 
 
 # Lista para guardar os itens
@@ -22,28 +26,44 @@ def digitar(texto, delay=0.03):
     console.print()  # quebra linha
 
 
-
-
 # -------- TELA INICIAL MATRIX -------- #
 def iniciar_matrix():
-    console.print("[green]Inicializando sistema...[/green]")
-    time.sleep(0.5)
-    console.print("[green]Carregando dados...[/green]")
-    time.sleep(0.5)
-    console.print("[green]Conectando à Matrix...[/green]")
-    time.sleep(0.8)
+    console.print(Rule("[bold green]MATRIX SYSTEM BOOT[/bold green]"))
+    chuva_matrix()
 
-    console.print("\n[bold green]>>> ACESSO CONCEDIDO <<<[/bold green]\n")
+    console.print("\n")
+
+    glitch("ACESSO CONCEDIDO")
     time.sleep(0.5)
 
-    digitar("Você tomou a pílula vermelha...")
-    time.sleep(0.5)
-    digitar("Bem-vinda ao mundo real.")
-    time.sleep(0.5)
-    console.print()
+    digitar("Você tomou a pílula vermelha...", 0.02)
+    digitar("Bem-vinda ao mundo real.", 0.02)
+
+    console.print(Rule("[green] SISTEMA PRONTO [/green]"))
 
 
 # -------- FUNÇÕES -------- #
+
+def processando(msg="Processando"):
+    for i in range(3):
+        console.print(f"[green]{msg}{'.' * (i+1)}[/green]", end="\r")
+        time.sleep(0.4)
+    console.print(" " * 50, end="\r")
+
+def glitch(texto):
+    for _ in range(3):
+        console.print(f"[bright_black]{texto}[/bright_black]", end="\r")
+        time.sleep(0.05)
+        console.print(f"[green]{texto}[/green]", end="\r")
+        time.sleep(0.05)
+    console.print(f"[bold bright_green]{texto}[/bold bright_green]")
+
+def chuva_matrix(linhas=12):
+    chars = "01アイウエオカキクケコ"
+    for _ in range(linhas):
+        linha = "".join(random.choice(chars) for _ in range(80))
+        console.print(f"[green]{linha}[/green]")
+        time.sleep(0.03)
 
 def mostrar_data():
     agora = datetime.now()
@@ -65,25 +85,25 @@ def mostrar_data_hora():
 
 def cadastrar_item(lista_itens):
     console.print("\n[cyan]Modo de inserção ativado...[/cyan]")
-    item = input(">> Digite um item: ")
+    item = console.input(">> Digite um item: ")
 
     if item == "":
         console.print("[yellow]Entrada vazia detectada.[/yellow]")
     else:
         lista_itens.append(item)
-        console.print("[green]Item armazenado na memória.[/green]")
+        console.print(f"[green]Item '{item}' armazenado na memória.[/green]")
 
 
 def listar_itens(lista_itens):
-    console.print("\n[cyan]Acessando banco de dados...[/cyan]")
+    processando("Acessando banco de dados")
     time.sleep(0.5)
 
     if len(lista_itens) == 0:
         console.print("[yellow]Nenhum dado encontrado.[/yellow]")
     else:
         console.print("[green]Registros encontrados:[/green]")
-        for i in range(len(lista_itens)):
-            console.print(f"[green][{i+1}][/green] {lista_itens[i]}")
+        for i, item in enumerate(lista_itens, start=1):
+            console.print(f"[green][{i}][/green] {item}")
 
 
 def contar_itens(lista_itens):
@@ -100,9 +120,8 @@ def mensagem_matrix():
         "Você já teve a sensação de que não está no controle?",
     ]
 
-    import random
     frase = random.choice(frases)
-
+    chuva_matrix(6)
     console.print("\n[bold cyan] TRANSMISSÃO DO ORÁCULO [/bold cyan]\n")
     digitar(f"{frase}", 0.04)
 
@@ -110,17 +129,26 @@ def mensagem_matrix():
 
 def submenu_lista(lista_itens, nome):
     while True:
-        console.print(f"\n[cyan]Operador: {nome} | Banco de Dados[/cyan]")
-        console.print("[1] Listar itens")
-        console.print("[2] Contar itens")
-        console.print("[3] Cadastrar item")
-        console.print("[0] Voltar")
+        console.print(Panel.fit(
+            f"""
+            [green]Operador:[/green] {nome}
+            [green]Módulo:[/green] Banco de Dados
+                        
+            [1] Listar itens
+            [2] Contar itens
+            [3] Cadastrar item
+            [0] Voltar
+        """,
+            border_style="green"
+        ))
 
-        opcao = input("Escolha: ")
+        opcao = console.input("[bold green]neo@matrix~# Escolha: [/bold green]")
 
         if opcao == "1":
+            processando()
             listar_itens(lista_itens)
         elif opcao == "2":
+            processando()
             contar_itens(lista_itens)
         elif opcao == "3":
             cadastrar_item(lista_itens)
@@ -137,15 +165,30 @@ iniciar_matrix()
 
 nome = console.input("[cyan]Identifique-se, operador: [/cyan]")
 
-while True:
-    console.print(f"\n[bold green]>> Bem-vindo (a), {nome}[/bold green]")
-    console.print("[1] Ver data")
-    console.print("[2] Ver hora")
-    console.print("[3] Gerenciar dados")
-    console.print("[4] Mensagem do Oráculo")
-    console.print("[0] Sair da Matrix")
+console.print(f"\n[green]Validando identidade de {nome}...[/green]")
+processando()
 
-    opcao = console.input("Escolha: ")
+console.print(f"[bold green]Acesso autoridado, {nome}.[/bold green]")
+
+def menu_principal(nome):
+    console.print(Panel.fit(
+        f"""
+    [bold green]>> Bem-vindo(a), {nome}[/bold green]
+    
+    [1] Ver data
+    [2] Ver hora
+    [3] Gerenciar dados
+    [4] Mensagem do Oráculo
+    [0] Sair da Matrix
+    """,
+        title="[bold green] TERMINAL MATRIX [/bold green]",
+        border_style="green"
+    ))
+
+while True:
+    menu_principal(nome)
+
+    opcao = console.input("[bold green]neo@matrix~# Escolha: [/bold green]")
 
     if opcao == "1":
         mostrar_data()
@@ -160,8 +203,10 @@ while True:
         mensagem_matrix()
 
     elif opcao == "0":
-        console.print("\n[bold green]Desconectando...[/bold green]")
-        digitar("Até a próxima, operador.", 0.04)
+
+        console.print(Panel.fit("[bold green]ENCERRANDO CONEXÃO COM A MATRIX...[/bold green]", border_style="green"))
+        chuva_matrix(6)
+        digitar("Você nunca steve realmente desconectado...", 0.04)
         break
 
     else:
