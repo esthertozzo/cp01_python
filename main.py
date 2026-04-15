@@ -206,7 +206,7 @@ while True:
 
         console.print(Panel.fit("[bold green]ENCERRANDO CONEXÃO COM A MATRIX...[/bold green]", border_style="green"))
         chuva_matrix(6)
-        digitar("Você nunca steve realmente desconectado...", 0.04)
+        digitar("Você nunca esteve realmente desconectado...", 0.04)
         break
 
     else:
